@@ -1,0 +1,109 @@
+---
+import { Icon } from "astro-icon/components";
+import { site } from "@/data/site";
+---
+
+<section
+  class="container-fluid py-5"
+  id="connect"
+  aria-labelledby="connect-heading"
+>
+  <div class="container">
+    <div class="section-title position-relative text-center mx-auto mb-5 pb-3">
+      <p class="eyebrow font-secondary">A Sweet Story</p>
+      <h2 id="connect-heading" class="display-4 text-uppercase">
+        Meet the Baker
+      </h2>
+    </div>
+
+    <div class="row g-4 g-md-5">
+      <div class="col-xxl-7 mx-lg-auto mx-xxl-none">
+        <figure class="quote-card bg-light p-3 mb-4">
+          <Icon
+            name="fa6-solid:quote-left"
+            size={32}
+            class="text-dark mb-3"
+            aria-hidden="true"
+          />
+          <blockquote class="blockquote mb-0">
+            <p>Every great celebration starts with something sweet.</p>
+          </blockquote>
+          <figcaption class="blockquote-footer mb-0">Founder Name</figcaption>
+        </figure>
+
+        <p class="h4 text-dark mb-4">
+          Our desserts are here to help you celebrate.
+        </p>
+        <!-- TODO: replace the placeholder story -->
+        <p>
+          We started in a tiny kitchen with one oven, a borrowed mixer and a big
+          appetite for making people smile. What began as baking for friends and
+          neighbors turned into weekend orders, then a waiting list, and
+          eventually a place of our own.
+        </p>
+        <p>
+          Today we still bake every order by hand, one batch at a time. We use
+          real butter, fresh fruit and flavors we'd happily serve at our own
+          table, and we never rush a recipe just because the line is out the
+          door.
+        </p>
+        <p>
+          Whether it's a birthday, a thank-you, a wedding or just a Tuesday,
+          we're here for it. Tell us what you're celebrating and we'll help you
+          pick, or build something custom from scratch.
+        </p>
+        <p>
+          Stop by, say hello, and stay a while. The coffee is hot, the case is
+          full, and there's always a sample waiting if you ask nicely.
+        </p>
+
+        <!-- <h3 class="h5 mt-4 mb-3">A Few Favorites</h3>
+        <dl class="row mb-0">
+          <dt class="col-sm-5 fw-semibold">Favorite flavor</dt>
+          <dd class="col-sm-7">Brown butter and sea salt</dd>
+          <dt class="col-sm-5 fw-semibold">Never without</dt>
+          <dd class="col-sm-7">A well-worn wooden spoon</dd>
+          <dt class="col-sm-5 fw-semibold">Best part of the job</dt>
+          <dd class="col-sm-7">Watching someone take the first bite</dd>
+        </dl> -->
+      </div>
+
+      <div class="col-xxl-4 d-none d-xxl-block">
+        <div class="team-item">
+          <div class="position-relative overflow-hidden">
+            <!-- TODO: replace /founder.webp with a demo portrait -->
+            <img
+              class="img-fluid w-100"
+              src="/founder.jpg"
+              alt="Portrait of the founder"
+              loading="lazy"
+            />
+            <div
+              class="team-overlay w-100 h-100 position-absolute top-50 start-50 translate-middle d-flex align-items-center justify-content-center"
+            >
+              <div class="d-flex mt-4">
+                {
+                  site.socials.map((s) => (
+                    <a
+                      class="btn btn-lg btn-primary btn-lg-square border-inner me-2"
+                      href={s.href}
+                      aria-label={s.label}
+                      target="_blank"
+                      rel="noopener"
+                    >
+                      <Icon name={s.icon} aria-hidden="true" />
+                    </a>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+          <div class="bg-dark border-inner text-center p-4">
+            <p class="h4 text-uppercase text-primary">Founder Name</p>
+            <p class="text-white m-0">Owner</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,866 @@
+/* global.css
+   Loads AFTER the Bootstrap 5.3 CDN stylesheet. Plain CSS, no Sass.
+   Fonts are loaded with <link> tags in Base.astro, not @import. */
+
+/* ── Tokens ─────────────────────────────────────────── */
+:root {
+  --bs-primary: #ffb2aa;
+  --bs-primary-rgb: 255, 178, 170;
+  --bs-secondary: #ffcdc7;
+  --bs-secondary-rgb: 255, 205, 199;
+  --bs-light: #eee8d8;
+  --bs-light-rgb: 238, 232, 216;
+  --bs-dark: #805f53; /* was #967569, which was 4.2:1 with white text */
+  --bs-dark-rgb: 128, 95, 83;
+  --bs-darker: #584227;
+  --bs-darker-rgb: 88, 66, 39;
+
+  --bs-body-font-family: "Nunito", sans-serif;
+  --bs-body-color: #595959;
+  --bs-body-color-rgb: 89, 89, 89;
+  --bs-heading-color: var(--bs-darker);
+
+  /* Links: pink fails on white (~1.7:1), so links use the brown */
+  --bs-link-color: #805f53;
+  --bs-link-color-rgb: 128, 95, 83;
+  --bs-link-hover-color: #584227;
+  --bs-link-hover-color-rgb: 88, 66, 39;
+
+  --bs-focus-ring-color: rgba(88, 66, 39, 0.35);
+
+  /* Square corners everywhere. Replaces ~80 lines of per-component overrides. */
+  --bs-border-radius: 0;
+  --bs-border-radius-sm: 0;
+  --bs-border-radius-lg: 0;
+  --bs-border-radius-xl: 0;
+  --bs-border-radius-xxl: 0;
+}
+
+/* ── Typography ─────────────────────────────────────── */
+body {
+  font-size: 1rem;
+  line-height: 1.6;
+  /* Safety net for any stray element wider than the viewport. clip (unlike hidden)
+     doesn't create a scroll container, so the sticky nav keeps working. */
+  overflow-x: clip;
+}
+
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+  font-family: "Lemonada", cursive;
+}
+h1,
+.h1,
+h2,
+.h2 {
+  font-weight: 700;
+}
+h3,
+.h3,
+h4,
+.h4 {
+  font-weight: 600;
+}
+h5,
+.h5,
+h6,
+.h6 {
+  font-weight: 500;
+}
+
+/* Bootstrap's .display-* sets weight 300. Lemonada doesn't ship that, so it fell
+   back to 500 and beat the heading weights above. Also gives non-heading
+   elements that use .display-* (like the Facts numbers) the heading font. */
+.display-1,
+.display-2,
+.display-3,
+.display-4,
+.display-5,
+.display-6 {
+  font-family: "Lemonada", cursive;
+  font-weight: 700;
+}
+
+/* Brand wordmark */
+.font-primary {
+  font-family: "Lemonada", cursive;
+  font-weight: 700;
+}
+.font-tertiary {
+  font-family: "Gluten", sans-serif;
+  font-weight: 700;
+}
+
+.eyebrow {
+  font-family: "Gluten", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1rem, 2vw, 1.25rem);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--bs-dark);
+  margin-bottom: 0.25rem;
+}
+
+.text-darker {
+  color: var(--bs-darker) !important;
+}
+
+.login {
+  color: inherit;
+}
+
+/* ── Layout helpers ─────────────────────────────────── */
+section[id] {
+  scroll-margin-top: 5rem;
+}
+
+.skip-link:focus {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 2000;
+  padding: 0.5rem 1rem;
+  background: #fff;
+  color: var(--bs-darker);
+}
+
+.footer {
+  margin-top: 5.625rem;
+}
+
+/* Wordmark scales with the viewport so it fits the one-third-width topbar column,
+   and wraps instead of overflowing if a client's name is long */
+.brand-lg {
+  font-size: clamp(1.5rem, 2.8vw, 2.5rem);
+  line-height: 1.1;
+  white-space: normal;
+}
+
+/* About + Connect */
+.icon-box {
+  width: 5.625rem;
+  height: 5.625rem;
+}
+.icon-box-sm {
+  width: 3.75rem;
+  height: 3.75rem;
+}
+.facts-col {
+  max-width: 45rem;
+}
+.about-image {
+  min-height: 25rem;
+  max-width: 42rem;
+}
+.about-copy {
+  max-width: 42rem;
+}
+
+/* Radio-button groups styled as buttons (gift card form) */
+.btn-check:checked + .btn-secondary {
+  --bs-btn-active-bg: var(--bs-primary);
+  --bs-btn-active-border-color: var(--bs-darker);
+}
+.btn-check:focus-visible + .btn {
+  outline: 3px solid #fff;
+  outline-offset: 2px;
+}
+.quote-card {
+  border-left: 0.35rem solid var(--bs-primary);
+  border-bottom: 1px solid var(--bs-light);
+}
+/* Pull-quote: the heading font gives it more presence than body text */
+.quote-card blockquote p {
+  font-family: "Lemonada", cursive;
+  font-weight: 500;
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  line-height: 1.4;
+  color: var(--bs-darker);
+}
+/* Bootstrap's default caption grey is ~3.9:1 on this cream */
+.quote-card .blockquote-footer {
+  margin-top: 0.75rem; /* Bootstrap pulls the caption up with margin-top: -1rem */
+  font-family: "Gluten", sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bs-dark);
+}
+
+/* Nav tightens once the topbar has scrolled away (class set in Header.astro) */
+#nav-sentinel {
+  height: 1px;
+  margin-bottom: -1px;
+}
+
+.visit-card {
+  border-left: 0.35rem solid var(--bs-primary);
+}
+@media (min-width: 992px) {
+  .navbar.is-stuck .navbar-nav .nav-link {
+    padding-block: 1.25rem;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .navbar-nav .nav-link {
+    transition: padding 0.2s ease;
+  }
+}
+
+.border-inner {
+  position: relative;
+}
+.border-inner * {
+  position: relative;
+  z-index: 1;
+}
+.border-inner::before {
+  position: absolute;
+  content: "";
+  inset: 10px;
+  border: 1px solid #fff;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.btn-square,
+.btn-sm-square,
+.btn-lg-square {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.btn-square {
+  width: 40px;
+  height: 40px;
+}
+.btn-sm-square {
+  width: 30px;
+  height: 30px;
+}
+.btn-lg-square {
+  width: 50px;
+  height: 50px;
+}
+
+.back-to-top {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 99;
+}
+.back-to-top[hidden] {
+  display: none;
+}
+
+/* The skip link targets <main tabindex="-1">. It isn't interactive, so clicking
+   anywhere in the page shouldn't draw an outline around the whole thing. */
+#main:focus {
+  outline: 0;
+}
+
+/* ── Focus ──────────────────────────────────────────── */
+:where(a, button, input, select, textarea, summary):focus-visible,
+.btn:focus-visible,
+.btn-close:focus-visible,
+.nav-link:focus-visible,
+.navbar-toggler:focus-visible,
+.accordion-button:focus-visible,
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  /* Brand brown: ~5.7:1 on white, 4.6:1 on cream, 3.3:1 on the pink. The darker
+     brown read as black. */
+  outline: 3px solid var(--bs-dark);
+  outline-offset: 2px;
+  box-shadow: none;
+}
+.btn-close {
+  --bs-btn-close-focus-shadow: none;
+} /* Bootstrap's default is a blue glow */
+.form-check-input:focus {
+  border-color: var(--bs-dark);
+}
+.bg-dark :focus-visible,
+[data-bs-theme="dark"] :focus-visible,
+.bg-img :focus-visible,
+.cta-band :focus-visible,
+.facts-bg :focus-visible,
+.hero-header :focus-visible {
+  outline-color: #fff;
+}
+/* The light hero variant has a pink veil, so it goes back to a dark ring */
+.hero-light :focus-visible {
+  outline-color: var(--bs-darker);
+}
+
+/* ── Buttons (Bootstrap 5.3 reads --bs-btn-* variables) ─ */
+.btn {
+  --bs-btn-font-family: "Lemonada", cursive;
+  --bs-btn-font-weight: 600;
+}
+
+.btn-primary {
+  --bs-btn-color: var(--bs-darker);
+  --bs-btn-bg: var(--bs-primary);
+  --bs-btn-border-color: var(--bs-primary);
+  --bs-btn-hover-color: var(--bs-darker);
+  --bs-btn-hover-bg: var(--bs-secondary);
+  --bs-btn-hover-border-color: var(--bs-secondary);
+  --bs-btn-active-color: var(--bs-darker);
+  --bs-btn-active-bg: var(--bs-secondary);
+  --bs-btn-active-border-color: var(--bs-secondary);
+  --bs-btn-focus-shadow-rgb: 88, 66, 39;
+  --bs-btn-disabled-color: var(--bs-body-color);
+  --bs-btn-disabled-bg: var(--bs-primary);
+  --bs-btn-disabled-border-color: var(--bs-primary);
+}
+
+.btn-secondary {
+  --bs-btn-color: var(--bs-darker);
+  --bs-btn-bg: var(--bs-light);
+  --bs-btn-border-color: var(--bs-light);
+  --bs-btn-hover-color: var(--bs-darker);
+  --bs-btn-hover-bg: var(--bs-primary);
+  --bs-btn-hover-border-color: var(--bs-primary);
+  --bs-btn-active-color: var(--bs-darker);
+  --bs-btn-active-bg: var(--bs-secondary);
+  --bs-btn-active-border-color: var(--bs-secondary);
+  --bs-btn-focus-shadow-rgb: 88, 66, 39;
+  --bs-btn-disabled-color: var(--bs-body-color);
+  --bs-btn-disabled-bg: var(--bs-light);
+  --bs-btn-disabled-border-color: var(--bs-light);
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--bs-darker);
+  --bs-btn-border-color: var(--bs-primary);
+  --bs-btn-hover-color: var(--bs-darker);
+  --bs-btn-hover-bg: var(--bs-primary);
+  --bs-btn-hover-border-color: var(--bs-primary);
+  --bs-btn-active-color: var(--bs-darker);
+  --bs-btn-active-bg: var(--bs-primary);
+  --bs-btn-active-border-color: var(--bs-primary);
+  --bs-btn-focus-shadow-rgb: 88, 66, 39;
+  --bs-btn-disabled-color: var(--bs-body-color);
+  --bs-btn-disabled-border-color: var(--bs-primary);
+}
+
+.btn-outline-secondary {
+  --bs-btn-color: var(--bs-darker);
+  --bs-btn-border-color: var(--bs-secondary);
+  --bs-btn-hover-color: var(--bs-darker);
+  --bs-btn-hover-bg: var(--bs-secondary);
+  --bs-btn-hover-border-color: var(--bs-secondary);
+  --bs-btn-active-color: var(--bs-darker);
+  --bs-btn-active-bg: var(--bs-secondary);
+  --bs-btn-active-border-color: var(--bs-secondary);
+  --bs-btn-focus-shadow-rgb: 88, 66, 39;
+  --bs-btn-disabled-color: var(--bs-body-color);
+  --bs-btn-disabled-border-color: var(--bs-secondary);
+}
+
+/* Bootstrap's default btn-dark is near-black; this one is the brand brown */
+.btn-dark {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--bs-darker);
+  --bs-btn-border-color: var(--bs-darker);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--bs-dark);
+  --bs-btn-hover-border-color: var(--bs-dark);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--bs-dark);
+  --bs-btn-active-border-color: var(--bs-dark);
+  --bs-btn-focus-shadow-rgb: 88, 66, 39;
+}
+
+/* Secondary buttons are brown, so they can't be mistaken for the pink primary ones.
+   White on #805f53 is ~5.7:1, and the brown edge is clearly visible on white. */
+.btn-secondary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--bs-dark);
+  --bs-btn-border-color: var(--bs-dark);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--bs-darker);
+  --bs-btn-hover-border-color: var(--bs-darker);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--bs-darker);
+  --bs-btn-active-border-color: var(--bs-darker);
+  --bs-btn-focus-shadow-rgb: 88, 66, 39;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--bs-dark);
+  --bs-btn-disabled-border-color: var(--bs-dark);
+}
+/* White-outline button for the dark brown bands, where a brown button would disappear */
+.btn-outline-light {
+  --bs-btn-hover-color: var(--bs-darker);
+}
+
+/* Brown outline button: the border is dark enough (~9:1) to identify the control on white */
+.btn-outline-dark {
+  --bs-btn-color: var(--bs-darker);
+  --bs-btn-border-color: var(--bs-darker);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--bs-darker);
+  --bs-btn-hover-border-color: var(--bs-darker);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--bs-darker);
+  --bs-btn-active-border-color: var(--bs-darker);
+  --bs-btn-focus-shadow-rgb: 88, 66, 39;
+  --bs-btn-disabled-color: var(--bs-body-color);
+  --bs-btn-disabled-border-color: var(--bs-body-color);
+}
+
+.btn-link {
+  --bs-btn-color: var(--bs-link-color);
+  --bs-btn-hover-color: var(--bs-link-hover-color);
+}
+
+.btn-lg {
+  --bs-btn-padding-y: 0.6rem;
+  --bs-btn-padding-x: 1rem;
+}
+
+/* ── Forms ──────────────────────────────────────────── */
+/* Bootstrap's #ced4da border is ~1.5:1 on white; inputs need 3:1 */
+.form-control,
+.form-select,
+.form-check-input {
+  border-color: #767676;
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--bs-darker);
+}
+.form-check-input:checked,
+.form-check-input[type="checkbox"]:indeterminate {
+  background-color: var(--bs-dark);
+  border-color: var(--bs-dark);
+}
+
+/* ── Navbar ─────────────────────────────────────────── */
+.navbar,
+.navbar[data-bs-theme="dark"] {
+  --bs-navbar-color: #fff;
+  --bs-navbar-hover-color: #fff;
+  --bs-navbar-active-color: #fff;
+  --bs-navbar-brand-color: #fff;
+  --bs-navbar-brand-hover-color: #fff;
+  --bs-navbar-toggler-border-color: #fff;
+}
+.navbar-nav .nav-link {
+  font-family: "Gluten", sans-serif;
+  font-size: 1.125rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  padding: 0.625rem 0;
+}
+.navbar-nav .nav-link:hover {
+  text-decoration: underline;
+}
+@media (min-width: 992px) {
+  .navbar-nav .nav-link {
+    padding: 1.875rem 0.9375rem;
+  }
+}
+
+/* Category pills sit on a bg-dark bar, so the active pill has to be light */
+.nav-pills {
+  --bs-nav-link-color: #fff;
+  --bs-nav-link-hover-color: #fff;
+  --bs-nav-pills-link-active-color: var(--bs-darker);
+  --bs-nav-pills-link-active-bg: var(--bs-primary);
+}
+
+/* ── Accordion (policies) ───────────────────────────── */
+.accordion {
+  --bs-accordion-bg: #fff; /* answers stay white; only the title bars are tinted */
+  --bs-accordion-btn-bg: var(--bs-light);
+  --bs-accordion-active-bg: var(
+    --bs-secondary
+  ); /* the lighter pink, ~6.7:1 with the dark brown text */
+  --bs-accordion-active-color: var(--bs-darker);
+  --bs-accordion-border-color: rgba(88, 66, 39, 0.2);
+  /* Bootstrap's focus state is a blue border; that was the stray line after clicking */
+  --bs-accordion-btn-focus-border-color: transparent;
+  --bs-accordion-btn-focus-box-shadow: none;
+  /* Brown chevrons (Bootstrap's defaults are gray and blue) */
+  --bs-accordion-btn-icon: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23584227'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+  --bs-accordion-btn-active-icon: var(--bs-accordion-btn-icon);
+}
+
+/* ── Photo sections ─────────────────────────────────── */
+/* Hero: background video over a brown base. The poster image (set on the <video>)
+   is what shows for reduced motion, Save-Data, or before the video loads. */
+.hero-header {
+  position: relative;
+  overflow: hidden;
+  background: var(--bs-darker);
+}
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  /* Below lg the text is centered across the whole width, so the overlay is even */
+  background: rgba(88, 66, 39, 0.68);
+}
+@media (min-width: 992px) {
+  /* From lg the text is a narrow centered block, so the overlay is strongest behind it
+     and fades toward the edges, letting the video's own pink show through */
+  .hero-overlay {
+    background: radial-gradient(
+      ellipse at center,
+      rgba(88, 66, 39, 0.8) 0%,
+      rgba(88, 66, 39, 0.62) 50%,
+      rgba(88, 66, 39, 0.15) 100%
+    );
+  }
+}
+/* Light variant (tone = "light" in Hero.astro): a pink veil instead, with dark text */
+.hero-light .hero-overlay {
+  background: rgba(255, 205, 199, 0.5);
+}
+/* Contrast checkers can't see the video or the veil, only this element's own color. Without it
+   they read the brown text as brown on the brown base above. This is the poster average
+   (#c0948b) under the veil, so it's also a sensible fallback if the video never loads. */
+.hero-light {
+  background: #dfb1a9;
+}
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+.video-toggle {
+  position: absolute;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: 50%;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+}
+.video-toggle:hover,
+.video-toggle:focus-visible {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+/* Brown bands: a faint pink gingham so they aren't flat. The 7% tint barely moves
+   text contrast. Swap for dots with radial-gradient(rgba(255,178,170,.1) 1.5px, transparent 1.5px). */
+.bg-img,
+.facts-bg,
+.cta-band {
+  background-color: var(--bs-darker);
+  background-image:
+    linear-gradient(rgba(255, 178, 170, 0.07) 50%, transparent 50%),
+    linear-gradient(90deg, rgba(255, 178, 170, 0.07) 50%, transparent 50%);
+  background-size: 2.5rem 2.5rem;
+}
+
+/* Visit Us map stretches to match the info card, so neither side has dead space */
+.map-wrap {
+  position: relative;
+  height: 100%;
+  min-height: 22rem;
+}
+.map-wrap > iframe,
+.map-wrap > div {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Avoid one-word last lines and unbalanced headings where the browser supports it */
+p {
+  text-wrap: pretty;
+}
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+/* Subscribe: from sm up the cards float over the top edge of the brown call-to-action band.
+   The row's negative bottom margin pulls the band up behind them, and the band's extra
+   top padding keeps its text clear of the cards. */
+@media (min-width: 576px) {
+  .highlights {
+    position: relative;
+    z-index: 1;
+    margin-bottom: -5rem;
+  }
+  .cta-band {
+    padding-top: 8rem !important;
+  }
+}
+
+/* A classic scrollbar means the page is ~15px narrower than the viewport the breakpoints see,
+   so at 992-1006 the lg layout gets slightly less room than it expects. Shrink the topbar
+   contents a little through the lg range so nothing wraps or crowds. */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  header .fs-1 {
+    font-size: 2rem !important;
+  }
+  header .gap-4 {
+    gap: 1rem !important;
+  }
+  header .btn {
+    padding-inline: 0.75rem;
+  }
+  header a.d-block {
+    white-space: nowrap;
+  }
+}
+
+.section-title {
+  max-width: 37.5rem;
+}
+
+.hero-header h1 {
+  text-wrap: balance;
+}
+
+.section-title::before {
+  position: absolute;
+  content: "";
+  width: 60px;
+  height: 10px;
+  left: 50%;
+  bottom: 0;
+  margin-left: -30px;
+  background: var(--bs-primary);
+}
+.section-title::after {
+  position: absolute;
+  content: "";
+  width: 180px;
+  height: 2px;
+  left: 50%;
+  bottom: 4px;
+  margin-left: -90px;
+  background: var(--bs-primary);
+}
+
+/* ── Products ───────────────────────────────────────── */
+/* Fills its column so every card in a row is the same height */
+.single-product {
+  height: 100%;
+  padding-bottom: 2.2rem;
+}
+
+.single-product .part-1 {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+.single-product .part-1 img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.single-product .part-1 .best-seller,
+.single-product .part-1 .new {
+  position: absolute;
+  top: 0.9375rem;
+  left: 1.25rem;
+  padding: 0.125rem 0.5rem;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: var(--bs-darker);
+  background-color: var(--bs-primary);
+}
+.single-product .part-1 .new {
+  left: 0;
+  color: #fff;
+  background-color: var(--bs-darker);
+}
+
+.single-product .view-more {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 0.625rem 1.25rem;
+  color: #fff;
+  background-color: var(--bs-dark);
+  opacity: 0;
+  /* visibility, not just opacity: checkers read an opacity: 0 label as white text on white */
+  visibility: hidden;
+  transition:
+    opacity 0.3s,
+    visibility 0.3s;
+}
+.single-product .part-1:hover .view-more,
+.single-product .part-1:focus-within .view-more {
+  opacity: 1;
+  visibility: visible;
+}
+
+.product-link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+.product-link:hover .product-title,
+.product-link:focus-visible .product-title {
+  text-decoration: underline;
+}
+
+/* The title takes the leftover height and the price sits at the bottom, so prices
+   line up across a row even when a longer name wraps */
+.single-product .part-2 {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.single-product .part-2 .product-title {
+  font-size: 1rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+}
+.single-product .product-price {
+  margin-top: auto;
+  font-family: "Lemonada", cursive;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+/* Category teasers + newsletter band */
+.newsletter-form {
+  max-width: 37.5rem;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 60vw;
+  object-fit: cover;
+}
+@media (min-width: 992px) {
+  .carousel-item img {
+    height: 40vw;
+  }
+}
+
+/* ── Cart panel ─────────────────────────────────────── */
+/* Native <dialog> as a right-hand drawer. The browser handles focus, Esc and the backdrop. */
+.cart-drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: 18.75rem;
+  max-width: 100%;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.cart-drawer::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+.cart-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.cart-panel .cart-preview-items {
+  flex: 1;
+  max-height: none;
+}
+
+.cart-preview-header {
+  padding: 0.625rem;
+  background-color: var(--bs-light);
+  border-bottom: 1px solid rgba(88, 66, 39, 0.25);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cart-preview-items {
+  padding: 0.625rem;
+  max-height: calc(100% - 150px);
+  overflow-y: auto;
+}
+.item-details {
+  width: 12.5rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cart-preview-footer {
+  padding: 0.625rem;
+  text-align: center;
+  border-top: 1px solid rgba(88, 66, 39, 0.25);
+}
+.cart-preview-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1100;
+}
+body:has(.cart-drawer[open]) {
+  overflow: hidden;
+}
+
+/* ── Team cards ─────────────────────────────────────── */
+.team-item .team-overlay {
+  opacity: 0;
+}
+.team-item:hover .team-overlay,
+.team-item:focus-within .team-overlay {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .team-item img,
+  .team-item .team-overlay {
+    transition: 0.5s;
+  }
+  .team-item:hover img {
+    transform: scale(1.1);
+    filter: blur(5px);
+  }
+}
+
+/* ── Reduced motion ─────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,98 @@
+---
+import { site } from "@/data/site";
+
+// Placeholder copy for the demo. A real store needs its own policies.
+const policies = [
+  {
+    id: "returns",
+    title: "Returns and Refunds",
+    body: [
+      "Because every order is made fresh, all sales are final. This is placeholder text, so replace it with your own policy.",
+      "If something arrives damaged, email us within 2 days of delivery with a photo and we'll make it right.",
+    ],
+  },
+  {
+    id: "shipping",
+    title: "Shipping Policy",
+    body: [
+      "Please provide a safe, accurate delivery address. Orders are baked to order and typically ship within 3-4 days.",
+      "Once a carrier confirms delivery, we can't be responsible for lost or stolen packages. Need it sooner? Get in touch about expedited processing.",
+    ],
+  },
+  {
+    id: "privacy",
+    title: "Privacy Policy",
+    body: [
+      "This is placeholder text. A real privacy policy should explain what information a store collects, how it's used, who it's shared with, and how customers can reach you with questions.",
+    ],
+  },
+];
+---
+
+<section
+  class="container-fluid py-5"
+  id="policies"
+  aria-labelledby="policies-heading"
+>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7 text-center">
+        <div
+          class="section-title position-relative text-center mx-auto mb-4 pb-3"
+        >
+          <p class="eyebrow font-secondary">The Fine Print</p>
+          <h2 id="policies-heading" class="display-4 text-uppercase">
+            Our Policies
+          </h2>
+        </div>
+        <p class="mb-4">
+          We want you to enjoy shopping with us, so our policies are clear, fair
+          and easy to find.
+        </p>
+
+        <!-- Bootstrap's own JS handles open/close, aria-expanded and keyboard -->
+        <div
+          class="accordion accordion-flush text-start"
+          id="policiesAccordion"
+        >
+          {
+            policies.map((p, i) => (
+              <div class="accordion-item">
+                <h3 class="accordion-header">
+                  <button
+                    class:list={["accordion-button", { collapsed: i !== 0 }]}
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target={`#policy-${p.id}`}
+                    aria-expanded={i === 0 ? "true" : "false"}
+                    aria-controls={`policy-${p.id}`}
+                  >
+                    {p.title}
+                  </button>
+                </h3>
+                <div
+                  id={`policy-${p.id}`}
+                  class:list={[
+                    "accordion-collapse collapse",
+                    { show: i === 0 },
+                  ]}
+                  data-bs-parent="#policiesAccordion"
+                >
+                  <div class="accordion-body">
+                    {p.body.map((para) => (
+                      <p>{para}</p>
+                    ))}
+                    <p class="mb-0">
+                      Questions?{" "}
+                      <a href={`mailto:${site.email}`}>{site.email}</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,71 @@
+---
+import { site } from "@/data/site";
+
+// Placeholder highlights. Titles are 11-12 characters and descriptions 86-88, so the three
+// cards wrap to the same number of lines. Keep that balance if you edit them.
+const highlights = [
+  {
+    title: "Baked Fresh",
+    text: "Everything comes out of the oven the same morning you pick it up, never the day before.",
+  },
+  {
+    title: "Real Flavor",
+    text: "We use real butter, ripe fruit and pure vanilla, with no shortcuts and no fake flavors.",
+  },
+  {
+    title: "For Everyone",
+    text: "Gluten-free, dairy-free and vegan options are always on the menu, so no one misses out.",
+  },
+];
+---
+
+<div class="subscribe-band mt-5">
+  <!-- Under sm the cards are hidden. From sm up they overlap the top edge of the brown band below. -->
+  <div class="container-fluid px-3 px-md-5">
+    <div class="container">
+      <div class="row g-4 g-md-5 highlights d-none d-sm-flex">
+        {
+          highlights.map((h, i) => (
+            <div
+              class={
+                i === highlights.length - 1
+                  ? "col-md-12 col-lg-4"
+                  : "col-md-6 col-lg-4"
+              }
+            >
+              <div class="bg-primary border-inner text-center text-darker p-4 p-xl-5 h-100">
+                <h2 class="h4 text-uppercase mb-3">{h.title}</h2>
+                <p class="mb-0">{h.text}</p>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- A real element with a real background, so contrast checkers can see it (a pseudo-element
+       behind the content reads as white on white) -->
+  <div class="cta-band py-5">
+    <div class="container text-center">
+      <h2 class="display-5 text-uppercase text-light">
+        Planning Something Sweet?
+      </h2>
+      <p class="h4 text-light mb-4">
+        Birthdays, showers, office treats and everything in between. Tell us
+        what you need and we'll make it happen.
+      </p>
+      <div class="d-flex flex-wrap justify-content-center gap-3">
+        <a class="btn btn-primary border-inner py-3 px-5" href="/#visit"
+          >Get in Touch</a
+        >
+        <a
+          class="btn btn-outline-light py-3 px-5"
+          href={`tel:${site.phoneHref}`}
+        >
+          Call {site.phone}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+---
+import { getProducts } from "@/lib/sanity";
+import ProductCard from "../ProductCard.astro";
+import Subscribe from "./Subscribe.astro";
+
+// Runs at build time, so there's no client-side fetch or loading state.
+const all = await getProducts();
+
+// Best sellers first, then everything else in a random order. This runs at build
+// time, so the order stays fixed until the next deploy.
+function shuffle<T>(items: T[]): T[] {
+  const copy = [...items];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
+
+const products = [
+  ...all.filter((p) => p.best_seller),
+  ...shuffle(all.filter((p) => !p.best_seller)),
+];
+---
+
+<section
+  class="container-fluid py-5 px-0"
+  id="shop"
+  aria-labelledby="shop-heading"
+>
+  <div class="container">
+    <div class="section-title position-relative text-center mx-auto mb-5 pb-3">
+      <p class="eyebrow font-secondary">Treat Yourself</p>
+      <h2 id="shop-heading" class="display-4 text-uppercase">
+        Order Yours Now!
+      </h2>
+    </div>
+
+    {
+      products.length === 0 ? (
+        <p class="text-center">No products yet. Check back soon.</p>
+      ) : (
+        <div class="row gx-3 gx-lg-4 text-center">
+          {products.map((p) => (
+            <ProductCard product={p} />
+          ))}
+        </div>
+      )
+    }
+  </div>
+
+  <Subscribe />
+</section>

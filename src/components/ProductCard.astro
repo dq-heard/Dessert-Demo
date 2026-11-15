@@ -1,0 +1,39 @@
+---
+import type { Product } from "../lib/types";
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+
+// Sanity's CDN resizes and picks WebP/AVIF for us
+const sized = (url: string) => `${url}?w=700&auto=format`;
+---
+
+<div class="col-6 col-lg-4 col-xl-3">
+  <div id={product._id} class="single-product">
+    <a href={`/products/${product.slug.current}`} class="product-link">
+      <div class="part-1">
+        <!-- alt="" because the product name is already in the link text -->
+        {
+          product.image && (
+            <img
+              src={sized(product.image)}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+          )
+        }
+        {product.best_seller && <span class="best-seller">Best Seller</span>}
+        {product.new && <span class="new">New</span>}
+        <div class="view-more" aria-hidden="true">View More</div>
+      </div>
+      <div class="part-2">
+        <h3 class="product-title">{product.name}</h3>
+        <p class="product-price">${product.price}</p>
+      </div>
+    </a>
+  </div>
+</div>

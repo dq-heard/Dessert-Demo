@@ -1,0 +1,83 @@
+---
+import { Icon } from "astro-icon/components";
+import Base from "@/layouts/Base.astro";
+import AddToCart from "@/components/AddToCart.tsx";
+import { getProducts, getProduct } from "@/lib/sanity";
+
+export async function getStaticPaths() {
+  const products = await getProducts();
+  return products.map((p) => ({ params: { slug: p.slug.current } }));
+}
+
+const { slug } = Astro.params;
+const product = await getProduct(slug!);
+if (!product) throw new Error(`No product found for slug "${slug}"`);
+
+const description = product.details?.slice(0, 155);
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: product.name,
+  image: product.image,
+  description: product.details,
+  offers: {
+    "@type": "Offer",
+    price: product.price,
+    priceCurrency: "USD",
+    availability: "https://schema.org/InStock",
+  },
+};
+---
+
+<Base title={product.name} description={description} image={product.image}>
+  <script
+    slot="head"
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+  />
+
+  <section class="container py-5">
+    <a href="/#shop" class="d-inline-flex align-items-center mb-4">
+      <Icon name="fa6-solid:arrow-left-long" class="me-2" aria-hidden="true" />
+      Back to Shop
+    </a>
+
+    <div class="row g-5">
+      <div class="col-md-6">
+        {
+          product.image && (
+            <img
+              class="img-fluid w-100"
+              src={`${product.image}?w=900&auto=format`}
+              alt={product.name}
+              width="900"
+            />
+          )
+        }
+      </div>
+
+      <div class="col-md-6">
+        {product.new && <span class="badge text-bg-dark mb-2 me-1">New</span>}
+        {
+          product.best_seller && (
+            <span class="badge text-bg-dark mb-2">Best Seller</span>
+          )
+        }
+        <h1 class="display-5">{product.name}</h1>
+        <p class="h3 text-dark mb-4">${product.price}</p>
+        {product.details && <p class="mb-4">{product.details}</p>}
+
+        <AddToCart
+          client:load
+          product={{
+            _id: product._id,
+            name: product.name,
+            price: product.price,
+            image: product.image,
+          }}
+        />
+      </div>
+    </div>
+  </section>
+</Base>

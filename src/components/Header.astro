@@ -1,0 +1,132 @@
+---
+import { Icon } from "astro-icon/components";
+import CartButton from "./CartButton.tsx";
+import { site } from "../data/site";
+
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/#about", label: "About" },
+  { href: "/#shop", label: "Shop" },
+  { href: "/#connect", label: "Connect" },
+  { href: "/#visit", label: "Visit" },
+  { href: "/#policies", label: "Policies" },
+];
+const current = Astro.url.pathname;
+---
+
+<!-- Desktop topbar. Hidden below lg; the nav below carries the brand there. -->
+<header class="container-fluid px-0 d-none d-lg-block">
+  <div class="row gx-0">
+    <div class="col-lg-4 text-center bg-light py-4">
+      <div class="d-inline-flex align-items-center justify-content-center">
+        <Icon
+          name="fa6-solid:envelope"
+          class="fs-1 text-dark me-3"
+          aria-hidden="true"
+        />
+        <div class="text-start">
+          <p class="text-uppercase font-tertiary text-dark lh-1 mb-1">
+            Email Us
+          </p>
+          <a class="d-block lh-sm" href={`mailto:${site.email}`}>{site.email}</a
+          >
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4 text-center bg-primary border-inner py-4">
+      <a
+        href="/"
+        class="navbar-brand d-inline-flex align-items-center justify-content-center font-primary text-darker brand-lg m-0"
+      >
+        <Icon name={site.brandIcon} class="me-3" aria-hidden="true" />
+        {site.name}
+      </a>
+    </div>
+
+    <div class="col-lg-4 bg-light py-4">
+      <div class="d-flex align-items-center justify-content-center gap-4">
+        <div class="d-inline-flex align-items-center">
+          <Icon
+            name="fa6-solid:phone"
+            class="fs-1 text-dark me-3"
+            aria-hidden="true"
+          />
+          <div class="text-start">
+            <p class="text-uppercase font-tertiary text-dark lh-1 mb-1">
+              Call Us
+            </p>
+            <a class="d-block lh-sm" href={`tel:${site.phoneHref}`}
+              >{site.phone}</a
+            >
+          </div>
+        </div>
+        <!-- client:only skips server rendering, so the saved cart count can't cause a hydration mismatch -->
+        <CartButton client:only="react" />
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Sibling of <header>, not a child, so position: sticky can stick past the topbar -->
+<div id="nav-sentinel" aria-hidden="true"></div>
+<nav
+  id="mainNav"
+  class="navbar navbar-expand-lg bg-dark sticky-top shadow-sm py-3 py-lg-0"
+  data-bs-theme="dark"
+  aria-label="Main"
+>
+  <div class="container-fluid">
+    <a class="navbar-brand d-lg-none font-primary fs-3" href="/">{site.name}</a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarCollapse"
+      aria-controls="navbarCollapse"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <div class="d-lg-none py-4 border-bottom border-white w-100">
+        <CartButton client:only="react" />
+      </div>
+      <ul class="navbar-nav mx-lg-auto">
+        {
+          links.map((link) => (
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                href={link.href}
+                aria-current={link.href === current ? "page" : undefined}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Tightens the nav slightly once the topbar has scrolled out of view
+  const nav = document.getElementById("mainNav");
+  const sentinel = document.getElementById("nav-sentinel");
+
+  if (nav && sentinel) {
+    new IntersectionObserver(
+      ([entry]) =>
+        nav.classList.toggle(
+          "is-stuck",
+          !entry.isIntersecting && entry.boundingClientRect.top < 0
+        ),
+      { threshold: 0 }
+    ).observe(sentinel);
+  }
+</script>

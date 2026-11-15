@@ -1,0 +1,112 @@
+---
+import { Icon } from "astro-icon/components";
+
+// Placeholder copy for the dessert theme. Swap freely.
+const eyebrow = "Baked Fresh Daily";
+const heading = "Sweet Treats for Sweet Moments";
+
+// true:  dark brown text over a light pink veil. For a mostly pink video (this one's poster
+//        averages #c0948b), white text would be ~2.7:1, so the text stays brown.
+// false: white text over a brown overlay that is strongest behind the centered text and
+//        fades toward the edges (lg and up).
+const light = true;
+---
+
+<section
+  class:list={[
+    "container-fluid py-5 mb-5 hero-header",
+    { "hero-light": light },
+  ]}
+>
+  <!-- Decorative background video. The poster is what shows for reduced motion,
+       Save-Data, or before the video loads, so it should look good on its own. -->
+  <video
+    class="hero-video"
+    muted
+    loop
+    playsinline
+    preload="none"
+    poster="/hero-poster.webp"
+    aria-hidden="true"
+    tabindex="-1"
+  >
+    <source src="/hero.mp4" type="video/mp4" />
+  </video>
+  <div class="hero-overlay" aria-hidden="true"></div>
+
+  <div class="container py-5 hero-content">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-7 text-center">
+        <p
+          class:list={[
+            "eyebrow fs-5 mb-4",
+            light ? "text-darker" : "text-secondary",
+          ]}
+        >
+          {eyebrow}
+        </p>
+        <h1
+          class:list={[
+            "display-3 text-uppercase mb-4",
+            light ? "text-darker" : "text-white",
+          ]}
+        >
+          {heading}
+        </h1>
+        <div class="d-flex justify-content-center pt-5">
+          <a
+            href="#shop"
+            class:list={[
+              "btn border-inner py-3 px-5",
+              light ? "btn-dark" : "btn-primary",
+            ]}
+          >
+            Order Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WCAG 2.2.2: anything that moves for more than 5 seconds needs a pause control -->
+  <button
+    type="button"
+    class="video-toggle"
+    aria-label="Pause background video"
+  >
+    <Icon name="fa6-solid:pause" class="icon-pause" aria-hidden="true" />
+    <Icon name="fa6-solid:play" class="icon-play d-none" aria-hidden="true" />
+  </button>
+</section>
+
+<script>
+  const video = document.querySelector<HTMLVideoElement>(".hero-video");
+  const toggle = document.querySelector<HTMLButtonElement>(".video-toggle");
+
+  if (video && toggle) {
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const saveData = (
+      navigator as Navigator & { connection?: { saveData?: boolean } }
+    ).connection?.saveData;
+    const pauseIcon = toggle.querySelector(".icon-pause");
+    const playIcon = toggle.querySelector(".icon-play");
+
+    const setPlaying = (play: boolean) => {
+      if (play) video.play().catch(() => setPlaying(false));
+      else video.pause();
+      toggle.setAttribute(
+        "aria-label",
+        play ? "Pause background video" : "Play background video"
+      );
+      pauseIcon?.classList.toggle("d-none", !play);
+      playIcon?.classList.toggle("d-none", play);
+    };
+
+    // preload="none" means reduced-motion and Save-Data visitors never download the video
+    setPlaying(!reduce.matches && !saveData);
+    reduce.addEventListener("change", (e) =>
+      setPlaying(!e.matches && !saveData)
+    );
+    toggle.addEventListener("click", () => setPlaying(video.paused));
+  }
+</script>

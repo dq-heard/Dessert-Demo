@@ -1,0 +1,33 @@
+---
+import { Icon } from "astro-icon/components";
+import Base from "@/layouts/Base.astro";
+---
+
+<Base title="Order placed" description="Thanks for your order.">
+  <section class="container text-center py-5 my-5">
+    <p class="eyebrow font-tertiary">Success</p>
+    <h1 class="mb-3">
+      Your order has been placed! <span aria-hidden="true">🎉</span>
+    </h1>
+    <p>Thank you for your purchase!</p>
+    <a
+      href="/"
+      class="btn btn-primary border-inner py-3 px-5 mt-4 d-inline-flex align-items-center gap-2"
+    >
+      Continue shopping
+      <Icon name="fa6-solid:arrow-right-long" aria-hidden="true" />
+    </a>
+  </section>
+</Base>
+
+<script>
+  import { runFireworks } from "@/lib/fireworks";
+  import { clearCart } from "@/lib/cart";
+
+  // Stripe sends people back with ?session_id=..., so only celebrate (and empty
+  // the cart) for a real checkout return, not for someone typing /success.
+  if (new URLSearchParams(window.location.search).has("session_id")) {
+    clearCart();
+    runFireworks();
+  }
+</script>

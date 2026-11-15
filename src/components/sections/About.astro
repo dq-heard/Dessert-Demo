@@ -1,0 +1,80 @@
+---
+import { Icon } from "astro-icon/components";
+import Facts from "./Facts.astro";
+
+// Placeholder copy for the dessert theme. Swap freely.
+const features = [
+  {
+    icon: "fa6-solid:hand-holding-heart",
+    title: "Made to Order",
+    text: "Most orders ship in 3-4 days. Custom cakes and larger orders need a little more notice, so plan ahead and tell us what you're dreaming of. We'll bake it fresh and have it ready right on time.",
+  },
+  {
+    icon: "fa6-solid:gift",
+    title: "One of a Kind",
+    text: "Every order is baked by hand, so no two are exactly alike. Add a personal touch with custom flavors, colors or a message, and make it something special for you or someone you love.",
+  },
+];
+---
+
+<section
+  class="container-fluid pt-5 px-0"
+  id="about"
+  aria-labelledby="about-heading"
+>
+  <div class="container px-5 px-lg-3">
+    <div class="section-title position-relative text-center mx-auto mb-5 pb-3">
+      <p class="eyebrow">What's Cooking?</p>
+      <h2 id="about-heading" class="display-4 text-uppercase">
+        Pick Your Treat
+      </h2>
+    </div>
+
+    <div class="row gx-5 justify-content-lg-center">
+      <div class="col-xl-5 mb-5 mb-xl-0 about-image">
+        <div class="position-relative h-100">
+          <!-- TODO: replace /about.webp with a demo photo and write real alt text -->
+          <img
+            class="position-absolute w-100 h-100 object-fit-cover"
+            src="/about.jpg"
+            alt="An assortment of desserts on a display table"
+            loading="lazy"
+          />
+        </div>
+      </div>
+
+      <div class="col-xl-6 pb-5 about-copy">
+        <p class="h4 mb-4">
+          If you see something you like, get it! Treat yourself to a little
+          sweetness, or surprise someone who deserves a reason to smile today.
+        </p>
+        <p class="mb-5">
+          The names on our menu are just a suggestion. Not sure what to pick?
+          Send us a note with your ideas, share your vision, and let's make
+          something delicious together.
+        </p>
+
+        <div class="row g-5">
+          {
+            features.map((f) => (
+              <div class="col-sm-6">
+                <div class="d-flex align-items-center justify-content-center bg-primary border-inner mb-4 icon-box">
+                  <Icon
+                    name={f.icon}
+                    size={45}
+                    class="text-darker"
+                    aria-hidden="true"
+                  />
+                </div>
+                <h3 class="h4 text-uppercase">{f.title}</h3>
+                <p class="mb-0">{f.text}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Facts />
+</section>

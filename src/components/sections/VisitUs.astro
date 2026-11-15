@@ -1,0 +1,112 @@
+---
+import { Icon } from "astro-icon/components";
+import { site } from "@/data/site";
+
+const directionsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+  site.address.join(", ")
+)}`;
+---
+
+<section
+  class="container-fluid bg-light py-5"
+  id="visit"
+  aria-labelledby="visit-heading"
+>
+  <div class="container">
+    <div class="section-title position-relative text-center mx-auto mb-5 pb-3">
+      <p class="eyebrow">Come Say Hi</p>
+      <h2 id="visit-heading" class="display-4 text-uppercase">Visit Us</h2>
+    </div>
+
+    <div class="row g-4 g-md-5">
+      <div class="col-lg-5">
+        <div class="visit-card bg-white p-4 p-lg-5 h-100">
+          <h3 class="h5 d-flex align-items-center">
+            <Icon
+              name="fa6-solid:location-dot"
+              class="me-2 text-dark"
+              aria-hidden="true"
+            />
+            Find Us
+          </h3>
+          <address class="mb-2">
+            {
+              site.address.map((line, i) => (
+                <>
+                  {line}
+                  {i < site.address.length - 1 && <br />}
+                </>
+              ))
+            }
+          </address>
+          <p class="mb-4">
+            <a href={directionsUrl} target="_blank" rel="noopener"
+              >Get directions<span class="visually-hidden">
+                (opens in a new tab)</span
+              ></a>
+          </p>
+
+          <h3 class="h5 d-flex align-items-center">
+            <Icon
+              name="fa6-solid:clock"
+              class="me-2 text-dark"
+              aria-hidden="true"
+            />
+            Hours
+          </h3>
+          <dl class="mb-4">
+            {
+              site.hours.map((h) => (
+                <div class="d-flex justify-content-between gap-3">
+                  <dt class="fw-normal">{h.days}</dt>
+                  <dd class="mb-0 text-end">{h.time}</dd>
+                </div>
+              ))
+            }
+          </dl>
+
+          <h3 class="h5 d-flex align-items-center">
+            <Icon
+              name="fa6-solid:phone"
+              class="me-2 text-dark"
+              aria-hidden="true"
+            />
+            Get in Touch
+          </h3>
+          <p class="mb-0">
+            <a href={`tel:${site.phoneHref}`}>{site.phone}</a><br />
+            <a href={`mailto:${site.email}`}>{site.email}</a>
+          </p>
+        </div>
+      </div>
+
+      <div class="col-lg-7">
+        <div class="map-wrap">
+          {
+            site.mapEmbedUrl ? (
+              <iframe
+                src={site.mapEmbedUrl}
+                title={`Map showing the location of ${site.name}`}
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              />
+            ) : (
+              <div class="bg-primary d-flex align-items-center justify-content-center text-center p-4 text-darker">
+                <div>
+                  <Icon
+                    name="fa6-solid:map-location-dot"
+                    size={48}
+                    class="mb-3"
+                    aria-hidden="true"
+                  />
+                  <p class="mb-0">Your map goes here.</p>
+                </div>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
